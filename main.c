@@ -11,16 +11,16 @@ struct Person {
 typedef struct Person Person;
 
 Person addPerson(void);
-void printPerson(const Person *person, size_t person_size);
+void printPerson(const Person *person, int n);
 void exitProgram(void);
 
 int main() {
 
-    int i;
+    int n=0;
     size_t person_size = 10;
     char choice;
     Person *person;
-    person = (Person *)malloc(1* sizeof(Person));
+    person = malloc(sizeof(Person) + person_size* sizeof(Person));
     if(person == NULL) {
         printf("person not allocated!");
         return 0;
@@ -33,19 +33,20 @@ int main() {
         scanf("%c", &choice);
         switch(choice) {
             case 'a':
-                if (sizeof(person)/sizeof(person[0]) == person_size ) {
+                if (n == person_size ) {
                     person_size += 5;       
                 }
-                for(i=sizeof(person)/sizeof(person[0]); i<person_size; i++) {
-                    person[i] = addPerson();
-                    break;
+                if(n < person_size) {
+                    person[n] = addPerson();
                 }
+                n++;
+                printf("%d\n", n);
                 break;
             case 'l':
-                printPerson(person, person_size);
+                printPerson(person, n);
                 break;
             case 'd':
-                printf("Delete");
+                printf("Delete\n");
                 break;
             case 'x':
                 exitProgram();
@@ -73,11 +74,11 @@ Person addPerson(void) {
     return person;
 }
 
-void printPerson(const Person *person, size_t person_size) {
+void printPerson(const Person *person, int n) {
     int i;
     printf("\n\n");
     printf("Id\tName\tAge\tJob\n");
-    for(i=0; i<person_size; ++i) {
+    for(i=0; i<n; ++i) {
         printf("%d\t%s\t%d\t%s\n", i+1, person->name, person->age, person->job);
     }
     printf("\n\n");
