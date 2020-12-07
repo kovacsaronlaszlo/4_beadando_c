@@ -75,9 +75,12 @@ Person addPerson(void) {
 
 void printPerson(const Person *person, size_t person_size) {
     int i;
+    printf("\n\n");
+    printf("Id\tName\tAge\tJob\n");
     for(i=0; i<person_size; ++i) {
-        printf("Person { name: %s, age: %d, job: %s }\n", person->name, person->age, person->job);
+        printf("%d\t%s\t%d\t%s\n", i+1, person->name, person->age, person->job);
     }
+    printf("\n\n");
     return;
 }
 
