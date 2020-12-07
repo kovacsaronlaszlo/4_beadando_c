@@ -10,16 +10,17 @@ struct Person {
 
 typedef struct Person Person;
 
-void addPerson(Person *person);
+Person addPerson(void);
 void printPerson(const Person *person, size_t person_size);
+void exitProgram(void);
 
 int main() {
 
     int i;
-    size_t person_size = 1;
+    size_t person_size = 10;
     char choice;
     Person *person;
-    person = calloc(person_size, sizeof(Person));
+    person = (Person *)malloc(1* sizeof(Person));
     if(person == NULL) {
         printf("person not allocated!");
         return 0;
@@ -30,14 +31,15 @@ int main() {
         printf("Add new person: a \tShow data: l\tDelete person: d\tExit: x\n\n");
         printf("Enter your choice:\n");
         scanf("%c", &choice);
-        person = realloc(person, person_size * sizeof(Person));
-        if(person == NULL) {
-            printf("person not allocated!");
-            return 0;
-        }
         switch(choice) {
             case 'a':
-                addPerson(person);
+                if (sizeof(person)/sizeof(person[0]) == person_size ) {
+                    person_size += 5;       
+                }
+                for(i=sizeof(person)/sizeof(person[0]); i<person_size; i++) {
+                    person[i] = addPerson();
+                    break;
+                }
                 break;
             case 'l':
                 printPerson(person, person_size);
@@ -46,34 +48,29 @@ int main() {
                 printf("Delete");
                 break;
             case 'x':
-                free(person);
-                exit(0);
+                exitProgram();
                 break;
             default:
                 printf("You have invalid choice\n\n\n\n");
                 break;
         }
     }
+    free(person);
 
+    return 0;
 }
 
-void addPerson(Person *person) {
+Person addPerson(void) {
+    Person person;
     printf("Please add the person name: ");
-    scanf("%s", person->name);
-    if(strlen(person->name) > 30) {
-        printf("Long name, max character length must be 30!");
-        return;
-    }
+    scanf("%30s", person.name);
     printf("Please add the person age: ");
-    scanf("%d", &person->age);
+    scanf("%d", &person.age);
     printf("Please add the person job: ");
-    scanf("%s", person->job);
-    if(strlen(person->job) > 30) {
-        printf("Long name, max character length must be 30!");
-        return;
-    }
+    scanf("%30s", person.job);
 
     printf("Person succesfully added\n");
+    return person;
 }
 
 void printPerson(const Person *person, size_t person_size) {
@@ -82,4 +79,8 @@ void printPerson(const Person *person, size_t person_size) {
         printf("Person { name: %s, age: %d, job: %s }\n", person->name, person->age, person->job);
     }
     return;
+}
+
+void exitProgram(void) {
+    exit(0);
 }
