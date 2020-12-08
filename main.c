@@ -11,8 +11,9 @@ struct Person {
 typedef struct Person Person;
 
 void addPerson(Person** personArr, int person_size, int n);
-void printPerson(const Person** personArr, int n);
+void printPerson(Person** personArr, int n);
 void exitProgram(void);
+void stringValidation(char *input);
 
 int main() {
 
@@ -49,6 +50,20 @@ int main() {
     return 0;
 }
 
+void stringValidation(char *input) {
+    int flag = 0;
+    do {
+        scanf("%s", input);
+        if(strlen(input)<=30) {
+            flag = 1;
+        } else {
+            printf("Long input, please add shorter: ");
+        }
+
+    } while(flag == 0);
+    return;
+}
+
 void addPerson(Person** personArr, int person_size, int n) {
 
     Person *person;
@@ -58,12 +73,11 @@ void addPerson(Person** personArr, int person_size, int n) {
         person_size += 5;       
     }
     printf("Please add the person name: ");
-    scanf("%30s", person->name);
+    stringValidation(person->name);
     printf("Please add the person age: ");
     scanf("%d", &person->age);
     printf("Please add the person job: ");
-    scanf("%30s", person->job);
-    printf("%d", n);
+    stringValidation(person->job);
     if(n < person_size) {
         personArr[n] = person;
     }
@@ -72,7 +86,7 @@ void addPerson(Person** personArr, int person_size, int n) {
     return;
 }
 
-void printPerson(const Person** personArr, int n) {
+void printPerson(Person** personArr, int n) {
     int i;
     printf("\n\n");
     printf("Id\tName\tAge\tJob\n");
