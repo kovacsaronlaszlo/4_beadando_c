@@ -10,22 +10,16 @@ struct Person {
 
 typedef struct Person Person;
 
-void addPerson(Person *person, size_t person_size, int n);
-void printPerson(const Person *person, int n);
+void addPerson(Person** personArr, int person_size, int n);
+void printPerson(const Person** personArr, int n);
 void exitProgram(void);
 
 int main() {
 
     int n=0;
-    size_t person_size = 10;
+    int person_size = 10;
     char choice;
-    Person *person;
-    person = (Person*)malloc(person_size* sizeof(Person));
-    if(person == NULL) {
-        printf("person not allocated!");
-        return 0;
-    }
-    
+    Person** personArr = (Person**)malloc(person_size * sizeof(Person*));    
 
     while(1) {
         printf("Add new person: a \tShow data: l\tDelete person: d\tExit: x\n\n");
@@ -33,16 +27,17 @@ int main() {
         scanf("%c", &choice);
         switch(choice) {
             case 'a':
-                addPerson(person, person_size, n);
+                addPerson(personArr, person_size, n);
                 n++;
                 break;
             case 'l':
-                printPerson(person, n);
+                printPerson(personArr, n);
                 break;
             case 'd':
                 printf("Delete\n");
                 break;
             case 'x':
+                free(personArr);
                 exitProgram();
                 break;
             default:
@@ -50,35 +45,39 @@ int main() {
                 break;
         }
     }
-    free(person);
 
     return 0;
 }
 
-void addPerson(Person *person, size_t person_size, int n) {
+void addPerson(Person** personArr, int person_size, int n) {
+
+    Person *person;
+    person = (Person*)malloc(sizeof(Person));
     
     if (n == person_size ) {
         person_size += 5;       
     }
+    printf("Please add the person name: ");
+    scanf("%30s", person->name);
+    printf("Please add the person age: ");
+    scanf("%d", &person->age);
+    printf("Please add the person job: ");
+    scanf("%30s", person->job);
+    printf("%d", n);
     if(n < person_size) {
-        printf("Please add the person name: ");
-        scanf("%30s", person->name);
-        printf("Please add the person age: ");
-        scanf("%d", &person->age);
-        printf("Please add the person job: ");
-        scanf("%30s", person->job);
+        personArr[n] = person;
     }
 
     printf("Person successfully added\n");
     return;
 }
 
-void printPerson(const Person *person, int n) {
+void printPerson(const Person** personArr, int n) {
     int i;
     printf("\n\n");
     printf("Id\tName\tAge\tJob\n");
     for(i=0; i<n; ++i) {
-        printf("%d\t%s\t%d\t%s\n", i+1, person->name, person->age, person->job);
+        printf("%d\t%s\t%d\t%s\n", i+1, personArr[i]->name, personArr[i]->age, personArr[i]->job);
     }
     printf("\n\n");
     return;
